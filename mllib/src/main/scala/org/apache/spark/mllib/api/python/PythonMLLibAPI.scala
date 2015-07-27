@@ -21,7 +21,7 @@ import java.io.OutputStream
 import java.nio.{ByteBuffer, ByteOrder}
 import java.util.{ArrayList => JArrayList, List => JList, Map => JMap}
 
-import org.apache.spark.mllib.linalg.distributed.{DistributedMatrices, RowMatrix, IndexedRowMatrix, IndexedRow,
+import org.apache.spark.mllib.linalg.distributed.{RowMatrix, IndexedRowMatrix, IndexedRow,
   MatrixEntry, CoordinateMatrix}
 
 import scala.collection.JavaConverters._
@@ -1109,14 +1109,14 @@ private[python] class PythonMLLibAPI extends Serializable {
   }
 
   /**
-   * Wrapper around DistributedMatrices.rowMatrix factory method.
+   * Wrapper around RowMatrix.
    */
   def createRowMatrix(rows: JavaRDD[Vector], numRows: Long, numCols: Int): RowMatrix = {
-    DistributedMatrices.rowMatrix(rows.rdd, numRows, numCols)
+    new RowMatrix(rows.rdd, numRows, numCols)
   }
 
   /**
-   * Wrapper around DistributedMatrices.indexedRowMatrix factory method.
+   * Wrapper around IndexedRowMatrix.
    */
   def createIndexedRowMatrix(rows: DataFrame, numRows: Long, numCols: Int): IndexedRowMatrix = {
     // We use DataFrames for serialization of IndexedRows from Python, so map each Row in the
@@ -1124,7 +1124,7 @@ private[python] class PythonMLLibAPI extends Serializable {
     val indexedRows = rows.map {
       case Row(index: Long, vector: Vector) => IndexedRow(index, vector)
     }
-    DistributedMatrices.indexedRowMatrix(indexedRows, numRows, numCols)
+    new IndexedRowMatrix(indexedRows, numRows, numCols)
   }
 
   /**
@@ -1137,7 +1137,7 @@ private[python] class PythonMLLibAPI extends Serializable {
   }
 
   /**
-   * Wrapper around DistributedMatrices.coordinateMatrix factory method.
+   * Wrapper around CoordinateMatrix.
    */
   def createCoordinateMatrix(rows: DataFrame, numRows: Long, numCols: Long): CoordinateMatrix = {
     // We use DataFrames for serialization of MatrixEntry entries from Python, so map each Row in
@@ -1145,7 +1145,7 @@ private[python] class PythonMLLibAPI extends Serializable {
     val entries = rows.map {
       case Row(i: Long, j: Long, value: Double) => MatrixEntry(i, j, value)
     }
-    DistributedMatrices.coordinateMatrix(entries, numRows, numCols)
+    new CoordinateMatrix(entries, numRows, numCols)
   }
 
   /**
