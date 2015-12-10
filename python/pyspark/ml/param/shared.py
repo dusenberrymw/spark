@@ -83,10 +83,12 @@ class HasFeaturesCol(Params):
     featuresCol = Param(Params._dummy(), "featuresCol", "features column name.")
 
     def __init__(self):
+        print("entering HasFeaturesCol")
         super(HasFeaturesCol, self).__init__()
         #: param for features column name.
         self.featuresCol = Param(self, "featuresCol", "features column name.")
         self._setDefault(featuresCol='features')
+        print("exiting HasFeaturesCol")
 
     def setFeaturesCol(self, value):
         """

@@ -130,7 +130,8 @@ class JavaEstimator(Estimator, JavaWrapper):
 
     def _fit(self, dataset):
         java_model = self._fit_java(dataset)
-        return self._create_model(java_model)
+        model = self._create_model(java_model)
+        return self._copyValues(model)
 
 
 @inherit_doc
@@ -164,9 +165,11 @@ class JavaModel(Model, JavaTransformer):
         Subclasses should call this constructor, initialize params,
         and then call _transformer_params_from_java.
         """
-        super(JavaModel, self).__init__()
+        print("entering JavaModel")
         self._java_obj = java_model
         self.uid = java_model.uid()
+        super(JavaModel, self).__init__()
+        print("exiting JavaModel")
 
     def copy(self, extra=None):
         """

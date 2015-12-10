@@ -570,7 +570,7 @@ class RandomForestRegressor(JavaEstimator, HasFeaturesCol, HasLabelCol, HasPredi
         return RandomForestRegressionModel(java_model)
 
 
-class RandomForestRegressionModel(TreeEnsembleModels):
+class RandomForestRegressionModel(TreeEnsembleModels, HasFeaturesCol):
     """
     Model fitted by RandomForestRegressor.
 

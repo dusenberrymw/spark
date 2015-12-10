@@ -66,6 +66,7 @@ class Params(Identifiable):
     __metaclass__ = ABCMeta
 
     def __init__(self):
+        print("entering Params")
         super(Params, self).__init__()
         #: internal param map for user-supplied values param map
         self._paramMap = {}
@@ -75,6 +76,7 @@ class Params(Identifiable):
 
         #: value returned by :py:func:`params`
         self._params = None
+        print("exiting Params")
 
     @property
     @since("1.3.0")
@@ -156,8 +158,11 @@ class Params(Identifiable):
         Tests whether this instance contains a param with a given
         (string) name.
         """
-        param = self._resolveParam(paramName)
-        return param in self.params
+        try:
+            param = self._resolveParam(paramName)
+            return param in self.params
+        except:
+            return False
 
     @since("1.4.0")
     def getOrDefault(self, param):

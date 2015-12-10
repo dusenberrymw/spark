@@ -40,7 +40,10 @@ class Identifiable(object):
 
     def __init__(self):
         #: A unique id for the object.
-        self.uid = self._randomUID()
+        print("entering Identifiable")
+        if not hasattr(self, 'uid'):
+            self.uid = self._randomUID()
+        print("exiting Identifiable")
 
     def __repr__(self):
         return self.uid
